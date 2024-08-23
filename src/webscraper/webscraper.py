@@ -21,26 +21,24 @@ def scrape_rmp_link(link: str) -> dict:
     would_take_again = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[0].text
 
     classes = soup.find_all("div", class_="RatingHeader__StyledClass-sc-1dlkqw1-3 eXfReS")
-    classes_taught = {}
+    classes_taught = []
     cache = {}
-    j = 1
     for i in range(len(classes)):
         if classes[i].text not in cache:
             cache[classes[i].text] = 1
-            classes_taught[j] = classes[i].text
-            j += 1
+            classes_taught.append(classes[i].text)
 
     tags = soup.find_all("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW")[0].find_all("span", class_="Tag-bs9vf4-0 hHOVKF")
-    top_tags = {}
+    top_tags = []
     for i in range(len(tags)):
-        top_tags[i+1] = tags[i].text.lower()
+        top_tags.append(tags[i].text)
 
     comments = soup.find_all("div", class_="Comments__StyledComments-dzzyvm-0 gRjWel")
-    recent_comments = {}
+    recent_comments = []
     for i in range(10):
         if i == len(comments):
             break
-        recent_comments[i+1] = comments[i].text
+        recent_comments.append(comments[i].text)
 
     # Print the information
     print("\n[Professor Info]\n")
@@ -86,4 +84,4 @@ def scrape_rmp_link(link: str) -> dict:
     print(result)
     return "ok"
 
-scrape_rmp_link("https://www.ratemyprofessors.com/professor/889722")
+scrape_rmp_link("https://www.ratemyprofessors.com/professor/900614")
