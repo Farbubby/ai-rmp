@@ -81,7 +81,4 @@ def scrape_rmp_link(link: str) -> dict:
               "top_tags": top_tags,
               "recent_comments": recent_comments}
     
-    print(result)
-    return "ok"
-
-scrape_rmp_link("https://www.ratemyprofessors.com/professor/900614")
+    return result
