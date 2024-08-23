@@ -5,40 +5,63 @@ def scrape_rmp_link(link: str) -> dict:
     html = requests.get(link).text
     soup = BeautifulSoup(html, 'html.parser')
 
-    # Get the relevant information
-    rating = soup.find_all("div", class_="RatingValue__Numerator-qw8sqy-2 liyUjw")[0].text + "/5"
-
-    num_ratings = soup.find_all("div", class_="RatingValue__NumRatings-qw8sqy-0 jMkisx")[0].find_all("a", class_=None)[0].text
-
-    prof_name = soup.find_all("div", class_="NameTitle__Name-dowf0z-0 cfjPUG")[0].text
-
-    prof_dept = soup.find_all("a", class_="TeacherDepartment__StyledDepartmentLink-fl79e8-0 iMmVHb")[0].text
-
-    university_name = soup.find_all("div", class_="NameTitle__Title-dowf0z-1 iLYGwn")[0].find_all("a", class_=None)[0].text
-
-    difficulty = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[1].text + "/5"
-
-    would_take_again = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[0].text
-
-    classes = soup.find_all("div", class_="RatingHeader__StyledClass-sc-1dlkqw1-3 eXfReS")
+    rating = "N/A"
+    num_ratings = "N/A"
+    prof_name = "N/A"
+    prof_dept = "N/A"
+    university_name = "N/A"
+    difficulty = "N/A"
+    would_take_again = "N/A"
     classes_taught = []
-    cache = {}
-    for i in range(len(classes)):
-        if classes[i].text not in cache:
-            cache[classes[i].text] = 1
-            classes_taught.append(classes[i].text)
-
-    tags = soup.find_all("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW")[0].find_all("span", class_="Tag-bs9vf4-0 hHOVKF")
     top_tags = []
-    for i in range(len(tags)):
-        top_tags.append(tags[i].text)
-
-    comments = soup.find_all("div", class_="Comments__StyledComments-dzzyvm-0 gRjWel")
     recent_comments = []
-    for i in range(10):
-        if i == len(comments):
-            break
-        recent_comments.append(comments[i].text)
+
+    # Get the relevant information
+    # If the information is not found, the default value is "N/A" or []
+
+    if (soup.find("div", class_="RatingValue__Numerator-qw8sqy-2 liyUjw")):
+        rating = soup.find("div", class_="RatingValue__Numerator-qw8sqy-2 liyUjw").text + "/5"
+
+    if (soup.find("div", class_="RatingValue__NumRatings-qw8sqy-0 jMkisx")):
+        if (soup.find("div", class_="RatingValue__NumRatings-qw8sqy-0 jMkisx").find("a", class_=None)):
+            num_ratings = soup.find("div", class_="RatingValue__NumRatings-qw8sqy-0 jMkisx").find("a", class_=None).text
+
+    if (soup.find("div", class_="NameTitle__Name-dowf0z-0 cfjPUG")):
+        prof_name = soup.find("div", class_="NameTitle__Name-dowf0z-0 cfjPUG").text
+
+    if (soup.find("a", class_="TeacherDepartment__StyledDepartmentLink-fl79e8-0 iMmVHb")):
+        prof_dept = soup.find("a", class_="TeacherDepartment__StyledDepartmentLink-fl79e8-0 iMmVHb").text
+
+    if (soup.find("div", class_="NameTitle__Title-dowf0z-1 iLYGwn")):
+        if (soup.find("div", class_="NameTitle__Title-dowf0z-1 iLYGwn").find("a", class_=None)):
+            university_name = soup.find("div", class_="NameTitle__Title-dowf0z-1 iLYGwn").find("a", class_=None).text
+    
+    if (len(soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")) > 1):
+        would_take_again = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[0].text
+        difficulty = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[1].text + "/5"
+
+    classes_taught = []
+    if (len(soup.find_all("div", class_="RatingHeader__StyledClass-sc-1dlkqw1-3 eXfReS")) > 0):
+        classes = soup.find_all("div", class_="RatingHeader__StyledClass-sc-1dlkqw1-3 eXfReS")
+        cache = {}
+        for i in range(len(classes)):
+            if classes[i].text not in cache:
+                cache[classes[i].text] = 1
+                classes_taught.append(classes[i].text)
+
+    top_tags = []
+    if (soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW")):
+        if (len(soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW").find_all("span", class_="Tag-bs9vf4-0 hHOVKF")) > 0):
+            tags = soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW").find_all("span", class_="Tag-bs9vf4-0 hHOVKF")
+            for i in range(len(tags)):
+                top_tags.append(tags[i].text)
+
+
+    recent_comments = []
+    if (len(soup.find_all("div", class_="Comments__StyledComments-dzzyvm-0 gRjWel")) > 0):
+        comments = soup.find_all("div", class_="Comments__StyledComments-dzzyvm-0 gRjWel")
+        for i in range(len(comments)):
+            recent_comments.append(comments[i].text)
 
     # Print the information
     print("\n[Professor Info]\n")
