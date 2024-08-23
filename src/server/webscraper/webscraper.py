@@ -1,7 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 
-def scrape_rmp_link(link: str) -> dict:
+def scrape_rmp_link(link: str) -> dict[str, str | list[str]]:
     html = requests.get(link).text
     soup = BeautifulSoup(html, 'html.parser')
 
@@ -90,7 +90,7 @@ def scrape_rmp_link(link: str) -> dict:
     #     "would_take_again": str,
     #     "classes_taught": str[],
     #     "top_tags": str[],
-    #     "recent_comments": str[]
+    #     "comments": str[]
     # }
 
     result = {"rating": rating,
@@ -102,6 +102,6 @@ def scrape_rmp_link(link: str) -> dict:
               "would_take_again": would_take_again,
               "classes_taught": classes_taught,
               "top_tags": top_tags,
-              "recent_comments": recent_comments}
+              "comments": recent_comments}
     
     return result
