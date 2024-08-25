@@ -3,11 +3,20 @@ from dotenv import load_dotenv
 from groq import Groq
 from pinecone import Pinecone, ServerlessSpec
 from webscraper import webscraper as ws
+import requests
 import os
 
 app = Flask(__name__)
 
-@app.route('/rmp-link', methods=['POST'])
+def getEmbeddings(model_id: str, hf_token: str, data: list[str]):
+    api_url = f"https://api-inference.huggingface.co/pipeline/feature-extraction/{model_id}"
+    headers = {"Authorization": f"Bearer {hf_token}"}
+
+    response = requests.post(api_url, headers=headers, json={"inputs": data, "options":{"wait_for_model":True}})
+    return response.json()
+
+
+@app.route('/link', methods=['POST'])
 def rmp_link():
     link = request.json['link']
 
@@ -25,10 +34,12 @@ def rmp_link():
     groq = Groq(api_key=os.getenv("GROQ_API_KEY"))
     pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
-    response = groq.embeddings.create(input=data['comments'], model="multilingual-e5-large")
-    embeddings = response.data[0].embedding
+    model_id = "sentence-transformers/all-MiniLM-L6-v2"
+    hf_token = os.getenv("HUGGINGFACE_API_KEY")
 
-    processed_data = {
+    embeddings = getEmbeddings(model_id, hf_token, data['prof_name'])
+
+    processed_data = [{
         "values": embeddings,
         "id": data['prof_name'],
         "metadata": {
@@ -40,6 +51,13 @@ def rmp_link():
             "difficulty": data['difficulty'],
             "classes_taught": data['classes_taught'],
         }
-    }
+    }]
+
+    # Insert the embeddings into the Pinecone index
+    index = pc.Index("rmp-index")
+    upsert_response = index.upsert(
+        vectors=processed_data,
+        namespace="professors",
+    )
     
-    return jsonify(processed_data)
+    return jsonify(upsert_response)

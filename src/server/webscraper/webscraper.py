@@ -40,7 +40,6 @@ def scrape_rmp_link(link: str) -> dict[str, str | list[str]]:
         would_take_again = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[0].text
         difficulty = soup.find_all("div", class_="FeedbackItem__FeedbackNumber-uof32n-1 kkESWs")[1].text + "/5"
 
-    classes_taught = []
     if (len(soup.find_all("div", class_="RatingHeader__StyledClass-sc-1dlkqw1-3 eXfReS")) > 0):
         classes = soup.find_all("div", class_="RatingHeader__StyledClass-sc-1dlkqw1-3 eXfReS")
         cache = {}
@@ -48,20 +47,24 @@ def scrape_rmp_link(link: str) -> dict[str, str | list[str]]:
             if classes[i].text not in cache:
                 cache[classes[i].text] = 1
                 classes_taught.append(classes[i].text)
+    else:
+        classes_taught = ["N/A"]
 
-    top_tags = []
     if (soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW")):
         if (len(soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW").find_all("span", class_="Tag-bs9vf4-0 hHOVKF")) > 0):
             tags = soup.find("div", class_="TeacherTags__TagsContainer-sc-16vmh1y-0 dbxJaW").find_all("span", class_="Tag-bs9vf4-0 hHOVKF")
             for i in range(len(tags)):
                 top_tags.append(tags[i].text)
+    else:
+        top_tags = ["N/A"]
 
 
-    recent_comments = []
     if (len(soup.find_all("div", class_="Comments__StyledComments-dzzyvm-0 gRjWel")) > 0):
         comments = soup.find_all("div", class_="Comments__StyledComments-dzzyvm-0 gRjWel")
         for i in range(len(comments)):
             recent_comments.append(comments[i].text)
+    else:
+        recent_comments = ["N/A"]
 
     # Print the information
     print("\n[Professor Info]\n")
