@@ -21,8 +21,8 @@ def getEmbeddings(model_id: str, hf_token: str, data: list[str]):
     return response.json()
 
 
-@app.route('/link', methods=['POST'])
-def rmp_link():
+@app.route('/api/link', methods=['POST'])
+def gen_data():
     link = request.json['link']
 
     if not link:
@@ -64,7 +64,7 @@ def rmp_link():
         "values": embeddings,
         "id": data['prof_name'],
         "metadata": {
-            "comments": data['comments'],
+            "summary": summary,
             "department": data['prof_dept'],
             "university": data['university_name'],
             "rating": data['rating'],
@@ -85,5 +85,7 @@ def rmp_link():
 
     # Print index statistics
     print(index.describe_index_stats())
-    
-    return jsonify("Done!")
+
+    data.update({ 'summary': summary })
+
+    return jsonify(data)
