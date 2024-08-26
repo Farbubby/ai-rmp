@@ -96,15 +96,17 @@ def scrape_rmp_link(link: str) -> dict[str, str | list[str]]:
     #     "comments": str[]
     # }
 
-    result = {"rating": rating,
-              "num_ratings": num_ratings,
-              "prof_name": prof_name,
-              "prof_dept": prof_dept,
-              "university_name": university_name,
-              "difficulty": difficulty,
-              "would_take_again": would_take_again,
-              "classes_taught": classes_taught,
-              "top_tags": top_tags,
-              "comments": recent_comments}
+    result = {
+                "rating": rating,
+                "num_ratings": num_ratings,
+                "prof_name": prof_name,
+                "prof_dept": prof_dept,
+                "university_name": university_name,
+                "difficulty": difficulty,
+                "would_take_again": would_take_again,
+                "classes_taught": classes_taught,
+                "top_tags": top_tags,
+                "comments": recent_comments
+              }
     
     return result
