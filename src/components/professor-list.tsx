@@ -93,6 +93,7 @@ export default function ProfessorList({ query }: ProfessorListProps) {
                   classesTaught={professor.metadata.classes_taught}
                   topTags={professor.metadata.top_tags}
                   takeAgain="0%"
+                  summary={professor.metadata.summary}
                 />
               </AccordionContent>
             </AccordionItem>

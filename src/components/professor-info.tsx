@@ -7,6 +7,7 @@ interface ProfessorInfoProps {
   classesTaught: string[];
   topTags: string[];
   takeAgain: string;
+  summary: string;
 }
 
 export default function ProfessorInfo({
@@ -18,6 +19,7 @@ export default function ProfessorInfo({
   classesTaught,
   topTags,
   takeAgain,
+  summary,
 }: ProfessorInfoProps) {
   return (
     <>
@@ -55,6 +57,7 @@ export default function ProfessorInfo({
           <div className="text-sm text-white">Would take again?</div>
           <div className="text-orange-400 text-lg">{takeAgain}</div>
         </div>
+        <div className="text-sm">{summary}</div>
       </div>
     </>
   );
