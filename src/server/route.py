@@ -90,13 +90,15 @@ def gen_data():
 
     return jsonify(data)
 
-@app.route('/api/query', methods=['GET'])
+@app.route('/api/professors', methods=['GET'])
 def get_professors():
 
-    query = request.json['query']
+    query = request.args.get('query')
 
     if not query:
         return jsonify({ 'error': 'Please provide a query' })
+    
+    load_dotenv()
 
     pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 
