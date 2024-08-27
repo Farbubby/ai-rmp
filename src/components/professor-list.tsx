@@ -1,6 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface ProfessorListProps {
   query: string;
@@ -69,24 +75,27 @@ export default function ProfessorList({ query }: ProfessorListProps) {
     );
   }
 
-  const professors = state.data.map((professor) => {
-    return (
-      <div key={professor.id} className="w-full flex flex-row gap-4 mt-4">
-        <div className="w-1/2">
-          <div className="text-white text-lg">{professor.id}</div>
-          <div className="text-white text-sm">{professor.metadata.rating}</div>
-        </div>
-        <div className="w-1/2">
-          <div className="text-white text-sm">
-            {professor.metadata.department}
-          </div>
-          <div className="text-white text-sm">
-            {professor.metadata.university}
-          </div>
-        </div>
-      </div>
-    );
-  });
+  const professors = (
+    <Accordion type="single" collapsible>
+      {state.data.map((professor, index) => {
+        return (
+          <>
+            <AccordionItem value={`item-${index}`}>
+              <AccordionTrigger>{professor.id}</AccordionTrigger>
+              <AccordionContent>
+                <div>
+                  <div>Department: {professor.metadata.department}</div>
+                  <div>University: {professor.metadata.university}</div>
+                  <div>Difficulty: {professor.metadata.difficulty}</div>
+                  <div>Rating: {professor.metadata.rating}</div>
+                </div>
+              </AccordionContent>
+            </AccordionItem>
+          </>
+        );
+      })}
+    </Accordion>
+  );
 
   return (
     <>
