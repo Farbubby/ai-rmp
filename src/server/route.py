@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from dotenv import load_dotenv
 from groq import Groq
 from pinecone import Pinecone
@@ -7,6 +8,7 @@ import requests
 import os
 
 app = Flask(__name__)
+CORS(app)
 
 system_prompt = """You are a rate my professor agent to help students find their professors for their classes.
                    Using a dictionary of information for a professor which will be provided, create a really 
@@ -117,4 +119,7 @@ def get_professors():
             'metadata': match['metadata']
         })
 
-    return jsonify(result)
+    response = jsonify(result)
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    return response
