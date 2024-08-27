@@ -8,7 +8,7 @@ export default function MainPage() {
   const [query, setQuery] = useState("");
 
   return (
-    <div className="px-24 pt-10">
+    <div className="px-24 pt-10 pb-10">
       <QueryInput setQuery={setQuery} />
       <ProfessorList query={query} />
     </div>

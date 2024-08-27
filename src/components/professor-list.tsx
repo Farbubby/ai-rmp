@@ -7,6 +7,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import ProfessorInfo from "./professor-info";
 
 interface ProfessorListProps {
   query: string;
@@ -76,19 +77,23 @@ export default function ProfessorList({ query }: ProfessorListProps) {
   }
 
   const professors = (
-    <Accordion type="single" collapsible>
+    <Accordion type="single" collapsible className="mt-24">
       {state.data.map((professor, index) => {
         return (
           <>
             <AccordionItem value={`item-${index}`}>
               <AccordionTrigger>{professor.id}</AccordionTrigger>
               <AccordionContent>
-                <div>
-                  <div>Department: {professor.metadata.department}</div>
-                  <div>University: {professor.metadata.university}</div>
-                  <div>Difficulty: {professor.metadata.difficulty}</div>
-                  <div>Rating: {professor.metadata.rating}</div>
-                </div>
+                <ProfessorInfo
+                  rating={professor.metadata.rating}
+                  difficulty={professor.metadata.difficulty}
+                  numRatings="0"
+                  department={professor.metadata.department}
+                  university={professor.metadata.university}
+                  classesTaught={professor.metadata.classes_taught}
+                  topTags={professor.metadata.top_tags}
+                  takeAgain="0%"
+                />
               </AccordionContent>
             </AccordionItem>
           </>
