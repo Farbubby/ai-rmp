@@ -89,3 +89,30 @@ def gen_data():
     data.update({ 'summary': summary })
 
     return jsonify(data)
+
+@app.route('/api/query', methods=['GET'])
+def get_professors():
+
+    query = request.json['query']
+
+    if not query:
+        return jsonify({ 'error': 'Please provide a query' })
+
+    pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
+
+    embeddings = getEmbeddings("intfloat/multilingual-e5-large", os.getenv("HUGGINGFACE_API_KEY"), query)
+
+    index = pc.Index("rmp-index")
+    val = index.query(vector=embeddings, top_k=5, namespace="professors", include_metadata=True)
+
+    matches = val.get('matches', [])
+
+    result = []
+    for match in matches:
+        result.append({
+            'id': match['id'],
+            'score': match['score'],
+            'metadata': match['metadata']
+        })
+
+    return jsonify(result)
