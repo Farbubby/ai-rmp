@@ -9,11 +9,11 @@ import {
 } from "@/components/ui/accordion";
 import ProfessorInfo from "./professor-info";
 
-interface ProfessorListProps {
+interface QueryProfessorsProps {
   query: string;
 }
 
-export default function ProfessorList({ query }: ProfessorListProps) {
+export default function QueryProfessors({ query }: QueryProfessorsProps) {
   const state = useQuery({
     queryKey: ["professors", query],
     queryFn: ({ queryKey }) =>

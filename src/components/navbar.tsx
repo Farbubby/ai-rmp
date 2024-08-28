@@ -4,8 +4,8 @@ interface NavbarProps {
 }
 
 export default function Navbar({ page, setPage }: NavbarProps) {
-  const q = page === "Enter a query" ? "bg-gray-700 duration-200" : "";
-  const s = page === "Submit a link" ? "bg-gray-700 duration-200" : "";
+  const clickQuery = page === "Enter a query" ? "bg-gray-700 duration-200" : "";
+  const clickLink = page === "Submit a link" ? "bg-gray-700 duration-200" : "";
 
   return (
     <>
@@ -14,14 +14,18 @@ export default function Navbar({ page, setPage }: NavbarProps) {
           onClick={() => {
             setPage("Enter a query");
           }}>
-          <div className={"py-1 px-2 rounded-lg " + q}>Enter a query</div>
+          <div className={"py-1 px-2 rounded-lg " + clickQuery}>
+            Enter a query
+          </div>
         </button>
         <div>|</div>
         <button
           onClick={() => {
             setPage("Submit a link");
           }}>
-          <div className={"py-1 px-2 rounded-lg " + s}>Submit a link</div>
+          <div className={"py-1 px-2 rounded-lg " + clickLink}>
+            Submit a link
+          </div>
         </button>
       </div>
     </>
