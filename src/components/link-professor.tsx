@@ -11,7 +11,7 @@ export default function LinkProfessor({ link }: LinkProfessorProps) {
   const state = useQuery({
     queryKey: ["professor", link],
     queryFn: ({ queryKey }) =>
-      fetch(`http://localhost:5000/api/link`, {
+      fetch(`/api/link`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

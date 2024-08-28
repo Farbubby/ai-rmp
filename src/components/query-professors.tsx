@@ -17,7 +17,7 @@ export default function QueryProfessors({ query }: QueryProfessorsProps) {
   const state = useQuery({
     queryKey: ["professors", query],
     queryFn: ({ queryKey }) =>
-      fetch(`http://localhost:5000/api/professors?query=${queryKey[1]}`).then(
+      fetch(`/api/professors?query=${queryKey[1]}`).then(
         (res) =>
           res.json() as Promise<
             {
